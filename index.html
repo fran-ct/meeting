@@ -1,66 +1,43 @@
+
 <!DOCTYPE html>
 <html lang="es">
 <head>
   <meta charset="UTF-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Meet Add-on Side Panel</title>
-  <style>
-    body { font-family: Roboto, sans-serif; margin: 0; padding: 16px; }
-    header { display:flex; align-items:center; }
-    header img { height:24px; margin-right:8px; }
-    main { margin-top: 16px; }
-    button {
-      padding:8px 16px;
-      font-size:16px;
-      border:none;
-      background:#4285F4;
-      color:#fff;
-      border-radius:4px;
-      cursor:pointer;
-    }
-    button:disabled { opacity:0.5; cursor:default; }
-    #error { color: #d93025; margin-top: 8px; }
-  </style>
-  <!-- Meet Add-ons SDK v1.1.0 -->
+  <title>Sidebar de Meet</title>
   <script src="https://www.gstatic.com/meetjs/addons/1.1.0/meet.addons.js"></script>
   <script>
-    // ⚠️ Sustituye estos valores por los de tu proyecto
-    const CLOUD_PROJECT_NUMBER = '132253621911';
-    const MAIN_STAGE_URL = 'https://TU_DOMINIO/main-stage.html';
-
     let sidePanelClient;
-    window.addEventListener('DOMContentLoaded', async () => {
-      try {
-        const session = await meet.addon.createAddonSession({
-          cloudProjectNumber: CLOUD_PROJECT_NUMBER
-        });
-        sidePanelClient = await session.createSidePanelClient();
-        document.getElementById('openMainStage').disabled = false;
-      } catch (e) {
-        document.getElementById('error').textContent = e.message;
-      }
-    });
 
+    // 1) Al cargar, creamos la sesión y el cliente de side panel
+    async function init() {
+      const session = await meet.addon.createAddonSession({
+        cloudProjectNumber: '132253621911'
+      });
+      sidePanelClient = await session.createSidePanelClient();
+      document.getElementById('openMainStage').disabled = false;
+    }
+
+    // 2) Al hacer clic, abrimos el Main Stage para todos
     async function openMainStage() {
-      if (!sidePanelClient) return;
+      if (!sidePanelClient) return alert('Aún no listo');
       await sidePanelClient.startActivity({
-        mainStageUrl: MAIN_STAGE_URL
+        mainStageUrl: 'https://TU_USUARIO.github.io/tu-repo/index.html'
       });
     }
+
+    window.onload = () => {
+      init();
+      document.getElementById('openMainStage')
+              .addEventListener('click', openMainStage);
+    };
   </script>
+  <style>
+    body { font-family: sans-serif; padding:16px; }
+    button { padding:8px 16px; font-size:16px; }
+  </style>
 </head>
 <body>
-  <header>
-    <img src="https://w7.pngwing.com/pngs/818/284/png-transparent-pictogram-computer-icons-graphy-toolkit-text-computer-logo-thumbnail.png" alt="Logo">
-    <h1>Mi Meet Add-on</h1>
-  </header>
-  <main>
-    <p>Bienvenido al panel lateral de tu complemento de Meet.</p>
-    <button id="openMainStage" onclick="openMainStage()" disabled>
-      Abrir Vista Principal
-    </button>
-    <div id="error"></div>
-  </main>
+  <h2>Mi Sidebar</h2>
+  <button id="openMainStage" disabled>Abrir Main Stage</button>
 </body>
 </html>
