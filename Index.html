@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <base target="_top">
+    <!-- SDK de Meet Add-ons -->
+    <script src="https://www.gstatic.com/meetjs/addons/1.0.0/meet.addons.js"></script>
+    <script>
+      let sidePanelClient;
+      async function init() {
+        const session = await meet.addon.createAddonSession({
+          cloudProjectNumber: '132253621911'
+        });
+        sidePanelClient = await session.createSidePanelClient();
+      }
+      async function startMainStage() {
+        console.log("ASD")
+      }
+      window.onload = init;
+    </script>
+  </head>
+  <body style="font-family:sans-serif;padding:16px">
+    <h1>Hola desde Meet Add-on</h1>
+    <button onclick="startMainStage()">
+      Abrir en Main Stage
+    </button>
+  </body>
+</html>
